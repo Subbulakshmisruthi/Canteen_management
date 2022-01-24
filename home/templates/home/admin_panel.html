@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Admin Panel</title>
+</head>
+<body style="background-color: #eee;">
+    <br><div class="card card-body" style="background-color: #333;">
+        <h5 style="color: #fff;"><span style="margin-right: 20px;"><span style="color: #addec9;">Meal</span> station</span>
+     
+           Dashboard
+         
+        </h5>
+    
+	<div style="text-align: right;">
+		<a class="btn btn-primary" style="background-color: #fff; border: 2px solid #fff; color: #000;" href="{%url 'products' %}">Go to Menu</a>
+		<a class="btn btn-primary" href="{% url 'logout' %}" style="background-color: #fff; border: 2px solid #fff; margin:10px; color: #000;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
+			<path d="M7.5 1v7h1V1h-1z"/>
+			<path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
+		  </svg> Logout</a>
+	</div>
+</div>
+<div class="row" style="margin: 10px; ">
+	<div class="col-md-4">
+		<hr>
+		<div class="card card-body" style="text-align: center;">
+			<h5>USERS</h5>
+			<form method="GET">
+				{{form.form}}
+				<input type="submit" value="Filter">
+			</form>
+			<table class="table table-sm">
+				<tr>
+					<th>Name</th>
+					<th>User Name</th>
+					<th>View</th>
+				</tr>
+				{% for customer in customers %}
+					<tr>
+						<td>{{customer.name}}</td>
+						<td>{{customer.user.username}}</td>
+						  <td style="text-align: center;"><a  style="color: #333;" href="{% url 'customer' customer.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+							<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+							<path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+						  </svg>
+						
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+
+	<div class="col-md-8" style="text-align: center;">
+		<hr>
+		<div class="card card-body">
+			<h5>ORDERS</h5>
+			<table class="table table-sm">
+				<tr>
+					<th>Product</th>
+					<th>Date Orderd</th>
+					<th>Status</th>
+					<th style="text-align: center;">View</th>
+				</tr>
+				{% for order in orders %}
+					<tr>
+						<td>{{order.product}}</td>
+						<td>{{order.date_created}}</td>
+						<td>{{order.status}}</td>
+						<td style="text-align: center;"><a  style="color: #333;" href="{% url 'updateOrder' order.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+							<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+							<path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+						  </svg>
+						
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+
+</div>
+
+	
+</body>
+</html>

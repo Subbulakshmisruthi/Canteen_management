@@ -1,0 +1,68 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Meal Station | Update</title>
+</head>
+<body style="background-color: #eee;">
+    <div class="card card-body" style="background-color: #333; padding: 40px;">
+        <h5 style="color: #fff;"><span style="margin-right: 20px;"><span style="color: #addec9;">Meal</span> station</span>
+     
+           {{header}}
+         
+        </h5>
+        {% if zxs %}
+        <div style="text-align: right;">
+            <a class="btn btn-primary" style="background-color: #fff; border: 2px solid #fff; color: #000;" href="{%url 'products' %}">Go to Menu</a>
+        </div>
+        {% else %}
+        <div style="text-align: right;">
+            <a class="btn btn-primary" style="background-color: #fff; border: 2px solid #fff; color: #000;" href="{%url 'home' %}">Home</a>
+        </div>
+        {% endif %}
+    </div>
+    <div style="padding: 50px 200px;">
+    {% if settings %}
+    <div class="row">
+        <div class="col-md-6" style="align-items: center; text-align: center; border: 2px solid #ddd; border-radius: 20px; padding: 50px;">
+            {% if customer.profile_pic%}
+            <img style="width:430px; height:430px; padding:10px; border-radius: 50%; border: 3px solid #555;" src="{{customer.profile_pic.url}}" alt="profilepic">
+            {% endif %}
+        </div>
+        <div class="col-md-6" style="padding: 100px 20px 100px 100px; ">
+            <div style="border: 2px solid #ddd; border-radius: 20px; padding: 50px;">
+                <h4>Profile info</h4>
+                <h3 style="font-weight: 100;">Username: {{customer.user}}</h3>
+                <h3 style="font-weight: 100;">E-mail: {{customer.email}}</h3>
+              
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if order%}
+        <h3>Order details </h3>
+        <br>
+        <div style="border-radius: 20px; border: 2px solid #ddd; padding: 20px; background-color: #fff;">
+            <h4 style="font-weight: 100;">Name: {{customer.name}}</h5>
+            <h5 style="font-weight: 100;">Email: {{customer.email}}</h5>
+            <h5 style="font-weight: 100;">Phone: {{customer.phone}}</h5>
+            </div>
+        <br>
+    {% endif %}
+    {% if settings %}
+    <a href="{% url 'deleteProfile' %}">Remove</a>
+    {% endif %}
+        <form action="" method="POST" enctype="multipart/form-data">
+            {%csrf_token%}
+            {{ form|crispy }}
+            <div style="text-align: center;">
+                <input class="btn btn-primary" style="background-color: #333; border: 2px solid #333;" type="Submit" name="Submit" value="Save changes">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <title>Product</title>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body" style="background-color: #333;">
+                <h5 style="color: #fff;"><span style="margin-right: 20px;"><span style="color: #addec9;">Meal</span> station</span>
+                 {%block header%}
+                    Menu
+                    {%endblock%}
+                </h5>
+    
+                <a class="btn" href="{% url 'home' %}" style="background-color: #fff; border: 2px solid #fff; margin:10px 600px; color: #000;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+                  </svg>  Go to Home</a>
+                  {% if group == "admin" %}
+                  <a class="btn" href="{% url 'addProduct' %}" style="background-color: #fff; border: 2px solid #fff; margin:10px 600px; color: #000;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                  </svg> Add new</a>
+                  {% endif %}
+            </div>
+            <div class="card card-body" >
+                {% block table %}
+                <form method="GET">
+                    {{filter.form}}
+                    <input type="Submit" name="Submit" value="Filter">
+                </form>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        {% if group == "customer" %}
+                            <th>View</th>
+                            {% else %}
+                            <th style="text-align: center;">Edit</th>
+                            <th style="text-align: center;">Delete</th>
+                        {% endif %}
+                    </tr>
+                   
+                    {% for product in products %}
+                        <tr>
+                            <td>{{product.name}}</td>
+                            <td>{{product.category}}</td>
+                            <td>${{product.price}}</td>
+                            {% if group == "customer" %}
+                                <td><a href="{% url 'productpage' product.id %}">View item</a></td>
+                                {% else %}
+                                <td style="text-align: center;"><a style="color: #000;" href="{% url 'updateProduct' product.id %}"><i class="fas fa-edit"></i></a></td>
+                                <td style="text-align: center;"><a style="color: #eb4034;" href="{% url 'deleteProduct' product.id %}"><i class="fas fa-trash-alt"></i></a></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% endblock %}
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

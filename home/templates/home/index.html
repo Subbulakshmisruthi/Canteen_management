@@ -1,0 +1,78 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="first_section">
+        <div id="intro">
+            <div class="menubar">
+                <ul>
+                    {% if islogin %}
+                        <li style="font-size: 22px; font-weight: bold;">Hello, {{name}}</li>
+                        <li><a href="{% url 'orders' %}">Orders</a></li>
+                        <!-- <li><a href="#">Cart</a></li> -->
+                        <li><a href="{%url 'products' %}">Menu</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <li><a href="{% url 'updateCustomer' %}"><img src="{{request.user.customer.profile_pic.url}}" alt="user" style="margin-top: 5px; border-radius: 50%; width: 36px;
+                            height: 36px;"></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <h1><span>Meal</span> station</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque obcaecati quaerat optio. Voluptas quia modi nesciunt incidunt iusto, asperiores repellat!
+            </p>
+            {% if islogin %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="message" placeholder="Give your feedback here">
+                    <input type="submit" style="height: 50px;
+                    width: 120px;
+                    border-radius: 20px;
+                    border: 2px solid #addec9;
+                    background-color: #fff;">
+                </form>
+            {% endif %}
+            {% if not islogin %}
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem, harum dicta non qui facere possimus hic esse necessitatibus quod eum!
+                </p>
+                <div class="mainbuttons" style="margin-top: 100px;">
+                    <ul style="text-align: center;">
+                        <li style="display: inline; margin-right: 20px;"><a class="mainbutton" href="{% url 'login' %}" style="color: #addec9; background-color: #fff; padding: 10px 65px; border-radius: 40px;">login</a></li>
+                        <li style="display: inline; margin-left: 20px;"><a class="mainbutton" href="{% url 'register'%}" style="color: #addec9; background-color: #fff; padding: 10px 60px; border-radius: 40px;">Register</a></li>
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+       <div class="col-md-3">
+           <img src="{% static 'images/fast-delivery.png'%}" alt="Delivery">
+       </div>
+       <div class="col-md-3">
+           <img src="{% static 'images/worldwide.png'%}" alt="www">
+       </div>
+       <div class="col-md-3">
+           <img src="{% static 'images/time.png'%}" alt="time">
+       </div>
+       <div class="col-md-3">
+        <img src="{% static 'images/open.png'%}" alt="time">
+        </div>
+    </div>
+    <ul style="text-align: center; margin-bottom:100px;">
+        <li style="display: inline; margin: 0 30px;">Lorem ipsum dolor sit amet.</li>
+        <li style="display: inline; margin: 0 30px;">Lorem ipsum dolor sit amet.</li>
+        <li style="display: inline; margin: 0 30px;">Lorem ipsum dolor sit amet.</li>
+        <li style="display: inline; margin: 0 30px;">Lorem ipsum dolor sit amet.</li>
+    </ul>
+    <div id="footer">
+        <p>Copyright &COPY; Lorem ipsum dolor sit amet.</p>
+    </div>
+</body>
+</html>
