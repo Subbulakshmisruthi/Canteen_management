@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{product.name}}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <style>
+        .swal2-popup {
+font-size: 13px !important;
+}
+  </style>
 </head>
 <body>
     <h2 style="display: inline;"><span style="color: #addec9; margin-left: 10px;">Meal</span> Station</h2>
@@ -14,7 +20,11 @@
       </svg>  Go to Menu</a>
     <div class="row" style="margin: 50px">
         <div class="col-md-6" style="display: flex; justify-content: center">
+            {% if product.image %}
             <img src="{{product.image.url}}" alt="test" style="width:400px ">
+            {% else %}
+            <div class="card" style="background-color: #eee; padding: 100px;"><p>Image preview not available</p></div>
+            {% endif %}
         </div>
         <div class="col-md-6" style="background-color: #333; color: #fff; padding: 40px; border-radius: 20px;">
             <div>
@@ -26,9 +36,22 @@
                 <br>
                 <h4>Price : ${{product.price}}</h4>
                 <br>
-                <a class="btn btn-primary" href="{% url 'buynow' product.id %}" style="color: #000; background-color: #fff; border: 2px solid #fff;">Buy Now</a>
+                <form action="{% url 'buynow' product.id %}" method="POST">
+                    {%csrf_token%}
+                    <label for="quantity">Quantity: </label>
+                    <select name="quantity" style="width: 70px; margin-right: 20px;">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <input type="submit" value="Buy Now" class="btn btn-primary" style="color: #000; background-color: #fff; border: 2px solid #fff;">
+                </form>
             </div>
         </div>
     </div>  
+    {% load sweetify %}
+    {% sweetify %}
 </body>
 </html>

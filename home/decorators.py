@@ -19,7 +19,7 @@ def allowedUsers(allowed_roles=[]):
             if group in allowed_roles:
                 return view_func(request, *args, **kargs)
             else:
-                return HttpResponse("YOU ARE NOT AUTHORIZED TO VIEW THIS PAGE. DO SIGN IN WITH A AUTHORIZED USERID AND ACCESS THE PAGE.")
+                return render('home/error.html')
         return wrapper_func
     return decorator
 

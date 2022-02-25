@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'home',
     'crispy_forms',
     'django_filters',
+    'sweetify'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

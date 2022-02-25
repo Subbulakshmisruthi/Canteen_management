@@ -1,4 +1,5 @@
 from email import message
+import this
 from django.contrib.auth.models import Group
 from unicodedata import category
 from django.shortcuts import render,redirect
@@ -14,12 +15,10 @@ from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .filters import *
+import sweetify
 # Create your views here.
 
-def buyNow(request,pk):
-    product=Product.objects.get(id=pk)
-    Order.objects.create(product=product,customer=request.user.customer,status='Pending')
-    return redirect('orders')
+
 
 @login_required(login_url="login")
 @allowedUsers(allowed_roles=["customer"])
@@ -29,7 +28,7 @@ def OrderPage(request):
     orders3=request.user.customer.order_set.filter(status='Delivered')
     total=0
     for order in orders1:
-        total+=order.product.price
+        total+=((order.quantity)*(order.product.price))
     for order in orders2:
         total+=order.product.price
     context={'orders1':orders1,'orders2':orders2,'total':total,'orders3':orders3}
@@ -39,10 +38,10 @@ def OrderPage(request):
 @allowedUsers(allowed_roles=['admin'])
 def admin_panel(request):
     customers=Customer.objects.all()
-    orders=Order.objects.all()
+    orders=Order.objects.all().order_by('date_created')
     filteruser=UserFilter(request.GET, queryset=customers)
     customers=filteruser.qs
-    context={'customers':customers,'orders':orders,'form':filteruser}
+    context={'customers':customers,'orders':orders,'form':filteruser,}
     return render(request,'home/admin_panel.html',context)
 
 @login_required(login_url='homeNotlogin')
@@ -67,6 +66,7 @@ def homeNotlogin(request):
     return render(request,'home/index.html',{
         "islogin":False
     })
+
 @authenticated_user
 def loginPage(request):
     if request.method=="POST":
@@ -80,6 +80,7 @@ def loginPage(request):
         else:
             messages.info(request,"Username or password is incorrect")
     return render(request,'home/login.html')
+
 @authenticated_user
 def register(request):
     form=CreateUserForm()
@@ -141,7 +142,8 @@ def updateOrder(request,pk):
         form=OrderForm(request.POST,instance=order)
         if form.is_valid():
             form.save()
-            return redirect('admin_panel')
+            sweetify.success(request, 'Changes saved successfully!')
+            #return redirect('admin_panel')
     context={'form':form,'customer':customer,'header':'Update order','order':True}
     return render(request,'home/form.html',context)
 
@@ -153,9 +155,22 @@ def updateProduct(request,pk):
         form=ProductForm(request.POST,request.FILES,instance=product)
         if form.is_valid():
             form.save()
-            return redirect('products')
+            sweetify.success(request, 'Changes saved successfully!')
+            #return redirect('products')
     context={'form':form,'header':'Update product','zxs':True}
     return render(request,'home/form.html',context)
+
+def buyNow(request,pk):
+    product=Product.objects.get(id=pk)
+    if request.method=="POST":
+        quantity=request.POST.get('quantity')
+        Order.objects.create(product=product,customer=request.user.customer,price=product.price,quantity=quantity,status='Pending')
+        sweetify.success(request, 'Order placed successfully!')
+    else:
+        quantity=1
+        Order.objects.create(product=product,customer=request.user.customer,price=product.price,quantity=quantity,status='Pending')
+        sweetify.success(request, 'Order placed successfully!')
+    return redirect('products')
 
 @allowedUsers(allowed_roles=['admin'])
 def addProduct(request):
@@ -164,7 +179,8 @@ def addProduct(request):
         form=ProductForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('products')
+            sweetify.success(request, 'Changes saved successfully!')
+            return redirect('addProduct')
     context={'form':form,'header':'Add product','zxs':True}
     return render(request,'home/form.html',context)
 
@@ -176,11 +192,13 @@ def deleteOrder(request,pk):
 def deletePending(request,pk):
     order=Order.objects.get(id=pk)
     order.delete()
+    sweetify.error(request, 'Order deleted!')
     return redirect('orders')
 
 def deleteProduct(request,pk):
     product=Product.objects.get(id=pk)
     product.delete()
+    sweetify.success(request, 'Product deleted successfully')
     return redirect('products')
 
 
@@ -191,7 +209,8 @@ def updateCustomer(request):
         form=CustomerForm(request.POST,request.FILES,instance=customer)
         if form.is_valid():
             form.save()
-            return redirect('updateCustomer')
+            sweetify.success(request, 'Changes saved successfully!')
+            #return redirect('updateCustomer')
     context={'form':form,'header':'SETTINGS','customer':customer,'settings':True}
     return render(request,'home/form.html',context)
 
